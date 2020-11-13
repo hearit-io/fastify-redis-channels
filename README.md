@@ -54,7 +54,7 @@ npm install --save fastify fastify-websocket fastify-redis-channels
 
 This step implements a chat room page where a user can send/receive messages to/from other users. 
 
-It automatically creates automaticaly a chat room for everything in the root path of the URL.
+It automatically creates a chat room for everything in the root path of the URL.
 
 For example, visiting `http://localhost/room1` and `http://localhost/room2` will create chat rooms `room1` and `room2`.
 
