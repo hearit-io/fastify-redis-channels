@@ -330,7 +330,7 @@ We use [Fastify](http://fastify.io) as an application framework. Thanks for the 
 
 
 ## Todo
-- [ ] Add plugin unit tests.
+- [x] Add plugin unit tests.
 - [ ] TypeScript support.
 
 
