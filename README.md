@@ -302,11 +302,8 @@ Open in two browser window a link to our example chat `room` [http://localhost:3
 
 Have a fun with your chat! :)
 
-The complete example is available as npm package, install it with:
+The complete example is available here [fastify-redis-channels-example](https://github.com/hearit-io/fastify-redis-channels-example)
 
-```
-npm install fastify-redis-channels-example
-```
 
 ## Project status
 
