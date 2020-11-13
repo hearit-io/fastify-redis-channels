@@ -58,16 +58,17 @@ function fastifyRedisChannels (fastify, opts, done) {
   }
 
   //
-  // Clean up connections and consumers 'onClose' automatically.
+  // Try to clean up connections and consumers 'onClose' automatically.
   // --------------------------------------------------------------------------|
   const cleanUpChannels = async (fastify, done) => {
     try {
       await fastify.channels.cleanup()
       done()
     } catch (error) {
-      done(error)
+      return done(error)
     }
   }
+
   fastify.addHook('onClose', cleanUpChannels)
 
   done()
