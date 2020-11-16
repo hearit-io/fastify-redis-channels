@@ -1,6 +1,21 @@
 # fastify-redis-channels
 
-A Fastify plugin for channels implementation based on Redis streams. 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
+![NPM License](https://img.shields.io/npm/l/fastify-redis-channels)
+![NPM Downloads](https://img.shields.io/npm/dw/fastify-redis-channels)
+
+
+A Fastify plugin for fast, reliable, and scalable channels implementation based on Redis streams.
+
+Suitable for IoT applications with a massive network traffic, pub/sub use cases or any implementation with multiple producers/consumers.
+
+Can be used with a single Redis instance and later updated easily to a cluster configuration without need of any application change.
+
+The implementation uses native Promises.
+
+Do you want your project to grow? Then start right from the begging.
+
 
 Under the hood [@hearit-io/redis-channels](https://github.com/hearit-io/redis-channels#readme) is used, the options you pass to a register will be passed to the RedisChannels instance.
 
