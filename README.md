@@ -111,7 +111,7 @@ function view (room) {
       ws.onmessage = function(e) {
         const data = JSON.parse(e.data)
         document.querySelector('#log').value += (data.message + '\\n')
-      };
+      }
 
       ws.onclose = function(e) {
         console.error('socket closed')
