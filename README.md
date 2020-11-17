@@ -33,7 +33,7 @@ Under the hood [@hearit-io/redis-channels](https://github.com/hearit-io/redis-ch
 
 ## Install
 
-```
+```shell
 $ npm install fastify-redis-channels --save
 ```
 
@@ -53,7 +53,7 @@ We will create a basic chat server based on websockets in this example.
 
 Create an empty folder for your application and initialise it:
 
-```
+```shell
 mkdir example
 cd example
 npm init
@@ -61,7 +61,7 @@ npm init
 
 Install all required packages:
 
-```
+```shell
 npm install --save fastify fastify-websocket fastify-redis-channels
 ```
 
@@ -75,7 +75,7 @@ For example, visiting `http://localhost/room1` and `http://localhost/room2` will
 
 Create a `room.js` file with a following content:
 
-```
+```javascript
 'use strict'
 
 function fastifyPluginRoom (fastify, opts, done) {
@@ -106,29 +106,29 @@ function view (room) {
     <script>
       const ws = new WebSocket(
         'ws://' + window.location.host + '/ws/' + '${room}'
-      );
+      )
 
       ws.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        document.querySelector('#log').value += (data.message + '\\n');
+        const data = JSON.parse(e.data)
+        document.querySelector('#log').value += (data.message + '\\n')
       };
 
       ws.onclose = function(e) {
-        console.error('socket closed');
+        console.error('socket closed')
       }
 
-      document.querySelector('#input').focus();
+      document.querySelector('#input').focus()
       document.querySelector('#input').onkeyup = function(e) {
         if (e.keyCode === 13) {
-          document.querySelector('#submit').click();
+          document.querySelector('#submit').click()
         }
-      };
+      }
 
       document.querySelector('#submit').onclick = function(e) {
-        const inputElem = document.querySelector('#input');
-        ws.send(JSON.stringify({ 'message': inputElem.value }));
-        inputElem.value = '';
-      };
+        const inputElem = document.querySelector('#input')
+        ws.send(JSON.stringify({ 'message': inputElem.value }))
+        inputElem.value = ''
+      }
     </script>
   </body>
   </html>
@@ -146,7 +146,7 @@ In this step we implement a simple Fastify server listening on port 3000.
 
 Create a file `server.js` as shown bellow: 
 
-```
+```javascript
 'use strict'
 
 const fastify = require('fastify')()
@@ -185,7 +185,7 @@ In this step we will create a consumer which broadcasts all messages received vi
 
 Create a file `consumer.js` as shown below: 
 
-```
+```javascript
 'use strict'
 
 function fastifyConsumerPlugin(fastify, opts, done) {
@@ -206,10 +206,10 @@ async function handler(connection, req, params) {
 
   try {
     // Creates a tunnel object to access a channel associated with the room.
-    const tunnel = await fastify.channels.use(params.room);
+    const tunnel = await fastify.channels.use(params.room)
 
     // Subscribes for messages.
-    await fastify.channels.subscribe(tunnel);
+    await fastify.channels.subscribe(tunnel)
 
     // Starts a consumer.
     consume(fastify, connection, tunnel)
@@ -217,8 +217,8 @@ async function handler(connection, req, params) {
         console.log('Consumer finished')
       })
       .catch((reject) => {
-        connection.socket.close();
-        return;
+        connection.socket.close()
+        return
       })
 
     // Produces received from a websocket messages to the corresponding tunnel.
@@ -227,8 +227,8 @@ async function handler(connection, req, params) {
         connection.resume()
         await fastify.channels.produce(tunnel, message)
       } catch (error) {
-        connection.socket.close();
-        return;
+        connection.socket.close()
+        return
       }
     })
 
@@ -238,7 +238,7 @@ async function handler(connection, req, params) {
     })
   }
   catch(error) {
-    connection.socket.close();
+    connection.socket.close()
   }
 }
 
@@ -247,7 +247,7 @@ async function handler(connection, req, params) {
 async function consume(fastify, connection, tunnel) {
   for await (const messages of fastify.channels.consume(tunnel)) {
     for (const i in messages) {
-      connection.socket.send(messages[i].data);
+      connection.socket.send(messages[i].data)
     }
   }
 }
@@ -257,7 +257,7 @@ module.exports = fastifyConsumerPlugin
 
 Register all plugins in the fastify server. The file `server.js` should look like this:
 
-```
+```javascript
 'use strict'
 
 const fastify = require('fastify')()
@@ -303,7 +303,7 @@ Before you test your chat, room application make sure you have up and running Re
 
 Run the server with the command:
 
-```
+```shell
 npm start
 ```
 
