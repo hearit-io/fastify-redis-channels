@@ -411,7 +411,7 @@ const channles = new RedisChannels({
 
 // Handle Control-D, Control-C
 async function handle(signal) {
-  channels = this
+  const channels = this
   await channels.cleanup()
 }
 process.on('SIGINT', handle.bind(channles))
