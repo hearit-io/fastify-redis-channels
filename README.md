@@ -3,7 +3,7 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
 ![NPM License](https://img.shields.io/npm/l/fastify-redis-channels)
-![NPM Downloads](https://img.shields.io/npm/dw/fastify-redis-channels)
+![NPM Downloads](https://img.shields.io/npm/dt/fastify-redis-channels)
 
 
 A Fastify plugin for fast, reliable, and scalable channels implementation based on Redis streams.
@@ -24,7 +24,8 @@ Under the hood [@hearit-io/redis-channels](https://github.com/hearit-io/redis-ch
 
 * [Install](#install)
 * [Usage](#usage)
-* [Learn by doing example](#learn-by-doing-example)
+* [Learn by doing](#learn-by-doing)
+  * [Chat server](#chat-server)
 * [Project status](#project-status)
 * [Todo](#todo)
 * [Authors and acknowledgment](#authors-and-acknowledgment)
@@ -45,17 +46,19 @@ You can access the RedisChannels instance via `fastify.channels`. A RedisChannel
 
 All channels are automatically closed when a fastify instance is closed.
 
-## Learn by doing example
+## Learn by doing 
+
+### Chat server
 
 We will create a basic chat server based on websockets in this example.
 
-### Step 1 - Install all required packages
+#### Step 1 - Install all required packages
 
 Create an empty folder for your application and initialise it:
 
 ```shell
-mkdir example
-cd example
+mkdir chat
+cd chat
 npm init
 ```
 
@@ -65,7 +68,7 @@ Install all required packages:
 npm install --save fastify fastify-websocket fastify-redis-channels
 ```
 
-### Step 2 - Create a chat room page
+#### Step 2 - Create a chat room page
 
 This step implements a chat room page where a user can send/receive messages to/from other users. 
 
@@ -140,7 +143,7 @@ module.exports = fastifyPluginRoom
 
 ```
 
-### Step 3 - Create a Fastify server
+#### Step 3 - Create a Fastify server
 
 In this step we implement a simple Fastify server listening on port 3000.
 
@@ -178,7 +181,7 @@ Listen on :  http://[::]:3000
 You should see your chat `room` on [http://localhost:3000/room]([http://localhost:3000/room)
 
 
-### Step 4 - Create a consumer using channels
+#### Step 4 - Create a consumer using channels
 
 In this step we will create a consumer which broadcasts all messages received via websockets to all clients in the corresponding chat rooms.
 
@@ -296,7 +299,7 @@ fastify.listen({ port: 3000 }, (error, address) => {
 })
 ```
 
-### Step 5 - Test your chat application
+#### Step 5 - Test your chat application
 
 Before you test your chat, room application make sure you have up and running Redis server on the default host `localhost` and port `6379`. For more info about the installation see on Redis [download](https://redis.io/download) page.
 
@@ -317,7 +320,7 @@ Open in two browser window a link to our example chat `room` [http://localhost:3
 
 Have a fun with your chat! :)
 
-The complete example is available here [fastify-redis-channels-example](https://github.com/hearit-io/fastify-redis-channels-example)
+The complete example is available here [fastify-redis-channels-chat-example](https://github.com/hearit-io/fastify-redis-channels-chat-example)
 
 
 ## Project status
