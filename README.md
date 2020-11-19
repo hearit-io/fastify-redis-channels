@@ -26,6 +26,7 @@ Under the hood [@hearit-io/redis-channels](https://github.com/hearit-io/redis-ch
 * [Usage](#usage)
 * [Learn by doing](#learn-by-doing)
   * [Chat server](#chat-server)
+  * [Statistic worker](#statistic-worker)
 * [Project status](#project-status)
 * [Todo](#todo)
 * [Authors and acknowledgment](#authors-and-acknowledgment)
@@ -84,8 +85,8 @@ Create a `room.js` file with a following content:
 function fastifyPluginRoom (fastify, opts, done) {
 
   // Route to the room
-  fastify.get('/:room', (request, replay) => {
-    replay.type('text/html').send(view(request.params.room))
+  fastify.get('/:room', (request, reply) => {
+    reply.type('text/html').send(view(request.params.room))
   })
 
   done()
@@ -320,8 +321,168 @@ Open in two browser window a link to our example chat `room` [http://localhost:3
 
 Have a fun with your chat! :)
 
-The complete example is available here [fastify-redis-channels-chat-example](https://github.com/hearit-io/fastify-redis-channels-chat-example)
+The complete example is available here [fastify-redis-channels-chat-example](https://github.com/hearit-io/fastify-redis-channels-chat-example).
 
+### Statistic worker
+
+In this example, our web server for each request will send through a channel `statistic` a data (user agent and the IP address) to a separate worker process for a further processing. This will offload a server from a resource expensive operations.  
+
+#### Step 1 - Install all required packages
+
+Create an empty folder for your application and initialise it:
+
+```shell
+mkdir worker
+cd worker
+npm init
+```
+
+Install all required packages:
+
+```shell
+npm install --save fastify fastify-redis-channels @hearit-io/redis-channels
+```
+#### Step 2 - Create a Fastify server
+
+In this step we implement a simple Fastify server listening on port 3000. 
+For each requiest on a route `/` the server will produce a message in the channel `statistic`.
+
+
+Create a file `server.js` as shown bellow: 
+
+```javascript
+'use strict'
+
+const fastify = require('fastify')()
+
+fastify.register(require('fastify-redis-channels'), {
+  channels: {
+    application: 'worker',
+  },
+  redis: {
+    host: 'localhost',
+    port: 6379
+  }
+})
+fastify.ready(error => {
+  if (error) console.log(error)
+})
+
+fastify.get('/', async (request, reply) => {
+
+  // Produces a statistic message for each request
+  const tunnel = await fastify.channels.use('statistic')
+  const message = {
+    agent: request.headers['user-agent'],
+    ip: request.ip
+  }
+  fastify.channels.produce(tunnel, JSON.stringify(message))
+
+  reply.type('text/html').send('Hello World')
+})
+
+fastify.listen({ port: 3000 }, (error, address) => {
+  if (error) console.log(error)
+  console.log('Listen on : ', address)
+})
+
+```
+#### Step 3 - Create a worker process
+
+In this step we will implement a consumer worker process with two consumers (working in a team). 
+
+Create a file `worker.js` as shown bellow: 
+
+```javascript
+'use strict'
+
+const {RedisChannels} = require('@hearit-io/redis-channels')
+
+// The channels instance
+const channles = new RedisChannels({
+  channels: {
+    application: 'worker',
+  },
+  redis: {
+    host: 'localhost',
+    port: 6379
+  }
+})
+
+// Handle Control-D, Control-C
+async function handle(signal) {
+  channels = this
+  await channels.cleanup()
+}
+process.on('SIGINT', handle.bind(channles))
+process.on('SIGTERM', handle.bind(channles))
+process.on('SIGHUP', handle.bind(channles))
+
+// A consumer function
+async function consume(tunnel, channels) {
+  for await (const messages of channels.consume(tunnel)) {
+    for (const i in messages) {
+      // Process a message
+      const data = JSON.parse(messages[i].data)
+      console.log(data)
+    }
+  }
+}
+// The main loop
+async function main () {
+  try {
+
+    // Creates tunnels to 'statistic'
+    const tunnelConsumerOne = await channles.use('statistic')
+    const tunnelConsumerTwo = await channles.use('statistic')
+
+    // Subscribe consumers in team
+    await channles.subscribe(tunnelConsumerOne, 'team')
+    await channles.subscribe(tunnelConsumerTwo, 'team')
+
+    // Start all consumers
+    consume(tunnelConsumerOne, channles).catch(() => { })
+    consume(tunnelConsumerTwo, channles).catch(() => { })
+
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+main()
+
+```
+
+#### Step 4 - Test a statistic worker
+
+In order to test the worker open two console windows and start a Fastify server and a worker process.
+
+Start the server: 
+
+```shell
+npm start
+```
+
+Start the worker process:
+
+```shell
+node worker.js
+```
+
+A request to [http://localhost:3000/](http://localhost:3000/) wil result in a worker console output like this:
+
+```shell
+{
+  agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69',
+  ip: '::ffff:78.83.64.18'
+}
+{
+  agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
+  ip: '::ffff:78.83.64.18'
+}
+
+```
+The complete example is available here [fastify-redis-channels-worker-example](https://github.com/hearit-io/fastify-redis-channels-worker-example).
 
 ## Project status
 
