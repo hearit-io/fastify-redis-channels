@@ -10,6 +10,8 @@ A Fastify plugin for fast, reliable, and scalable channels implementation based 
 
 Suitable for IoT applications with a massive network traffic, pub/sub use cases or any implementation with multiple producers/consumers.
 
+Implements a possiblity to scale the message processing across different consumers, without single consumers having to process all the messages. A group of consumers (a team) can cooperate consuming a different portion of the messages form the same channel.
+
 Can be used with a single Redis instance and later updated easily to a cluster configuration without need of any application change.
 
 The implementation uses native Promises.
