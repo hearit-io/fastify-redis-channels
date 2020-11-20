@@ -275,7 +275,7 @@ fastify.after(error => {
 
 fastify.register(require('fastify-redis-channels'), {
   channels: {
-    application: 'example',
+    application: 'chat',
   },
   redis: {
     host: 'localhost',
@@ -471,7 +471,7 @@ Start the worker process:
 node worker.js
 ```
 
-A request to [http://localhost:3000/](http://localhost:3000/) wil result in a worker console output like this:
+A request to [http://localhost:3000/](http://localhost:3000/) will result in a worker console output like this:
 
 ```shell
 {
