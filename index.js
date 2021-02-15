@@ -15,10 +15,16 @@
 *
 * It adds to your fastify instance following decorators:
 *
-* channels  - an instance of RedisChannels. For more details see
-*            https://github.com/hearit-io/redis-channels#readme
+* channels  - an instance of a RedisChannels.
+*
+* or
+*
+* channels[namespace] - more than RedisChannels instances for each namespace.
 *
 * RedisChannelsError - a channel error class
+*
+*
+* For more details see https://github.com/hearit-io/redis-channels#readme.
 *
 * The plugin works with a single Redis instances or a cluster.
 *
@@ -43,7 +49,15 @@ const {
 // The plugin function
 // ----------------------------------------------------------------------------|
 function fastifyRedisChannels (fastify, opts, done) {
-  if (typeof fastify.channels !== 'undefined') {
+  const namespace = opts.namespace
+  if (typeof namespace !== 'undefined' &&
+      typeof fastify.channels !== 'undefined' &&
+      typeof fastify.channels[namespace] !== 'undefined') {
+    return done(new Error('A channels instance for a namespace \'' +
+      namespace + '\' has already been registered!'))
+  }
+  if (typeof namespace === 'undefined' &&
+      typeof fastify.channels !== 'undefined') {
     return done(new Error('A channels instance has already been registered!'))
   }
 
@@ -51,7 +65,12 @@ function fastifyRedisChannels (fastify, opts, done) {
     //
     // Append a channels instance and an error class.
     // ------------------------------------------------------------------------|
-    fastify.decorate('channels', new RedisChannels(opts))
+    if (typeof namespace !== 'undefined') {
+      fastify.decorate('channels', {})
+      fastify.channels[namespace] = new RedisChannels(opts)
+    } else {
+      fastify.decorate('channels', new RedisChannels(opts))
+    }
     fastify.decorate('RedisChannelsError', RedisChannelsError)
   } catch (error) {
     return done(error)
@@ -62,7 +81,13 @@ function fastifyRedisChannels (fastify, opts, done) {
   // --------------------------------------------------------------------------|
   const cleanUpChannels = async (fastify, done) => {
     try {
-      await fastify.channels.cleanup()
+      if (typeof namespace !== 'undefined') {
+        for (const i in fastify.channels) {
+          await fastify.channels[i].cleanup()
+        }
+      } else {
+        await fastify.channels.cleanup()
+      }
       done()
     } catch (error) {
       return done(error)

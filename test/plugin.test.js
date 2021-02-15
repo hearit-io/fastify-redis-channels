@@ -47,7 +47,7 @@ tap.test('Simulate an error on fastify.channels.cleanup()', t => {
 })
 
 // ----------------------------------------------------------------------------|
-tap.test('Register a plugin twice', t => {
+tap.test('Register a plugin twice (no namespace)', t => {
   t.plan(2)
   const fastify = Fastify()
   t.teardown(() => fastify.close())
@@ -57,6 +57,26 @@ tap.test('Register a plugin twice', t => {
     .ready(err => {
       t.ok(err)
       t.equal(err.message, 'A channels instance has already been registered!')
+    })
+})
+
+// ----------------------------------------------------------------------------|
+tap.test('Register a plugin twice (same namespace)', t => {
+  t.plan(2)
+  const fastify = Fastify()
+  t.teardown(() => fastify.close())
+  fastify
+    .register(fastifyRedisChannelsPlugin, {
+      channels: { application: 'test' },
+      namespace: 'test'
+    })
+    .register(fastifyRedisChannelsPlugin, {
+      channels: { application: 'test' },
+      namespace: 'test'
+    })
+    .ready(err => {
+      t.ok(err)
+      t.equal(err.message, 'A channels instance for a namespace \'test\' has already been registered!')
     })
 })
 

@@ -1,6 +1,6 @@
 {
   "name": "fastify-redis-channels",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A Fastify plugin for channels implementation based on Redis streams.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/hearit-io/fastify-redis-channels#readme",
   "dependencies": {
-    "@hearit-io/redis-channels": "^1.1.0",
+    "@hearit-io/redis-channels": "^1.1.2",
     "fastify-plugin": "^3.0.0"
   },
   "devDependencies": {
