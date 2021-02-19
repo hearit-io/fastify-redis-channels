@@ -47,7 +47,7 @@ Add it to your project with register and that's it!
 
 You can access the RedisChannels instance via `fastify.channels`. A RedisChannelsError object is accessible via `fastify.RedisChannelsError`.  
 
-If you want to define a separate RedisChannels instace for a given namespace namespace you can add a namespace property in the options. You can access the namespaced instance via fastify.channels[namespace]
+If you want to define a separate RedisChannels instace for a given namespace you can add a `namespace` property in the options. You can access the namespaced instance via `fastify.channels[namespace]`
 
 All channels are automatically closed when a fastify instance is closed.
 
