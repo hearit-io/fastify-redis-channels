@@ -1,6 +1,6 @@
 {
   "name": "fastify-redis-channels",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A Fastify plugin for channels implementation based on Redis streams.",
   "main": "index.js",
   "scripts": {
@@ -14,11 +14,19 @@
   },
   "keywords": [
     "fastify",
+    "plugin",
     "redis",
+    "cluster",
+    "pre-sharded",
     "channel",
-    "reliable",
-    "high-performance",
-    "easy"
+    "stream",
+    "message broker",
+    "produce",
+    "consume",
+    "pub/sub",
+    "websocket",
+    "SSE",
+    "eventsource"
   ],
   "author": "Emil Usunov <emil@hearit.io>",
   "license": "MIT",
@@ -27,13 +35,13 @@
   },
   "homepage": "https://github.com/hearit-io/fastify-redis-channels#readme",
   "dependencies": {
-    "@hearit-io/redis-channels": "^1.1.2",
+    "@hearit-io/redis-channels": "^1.2.0",
     "fastify-plugin": "^3.0.0"
   },
   "devDependencies": {
-    "fastify": "^3.8.0",
+    "fastify": "^3.21.0",
     "snazzy": "^9.0.0",
-    "standard": "^16.0.1",
-    "tap": "^14.10.8"
+    "standard": "^16.0.3",
+    "tap": "^15.0.9"
   }
 }

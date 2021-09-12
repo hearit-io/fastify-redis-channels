@@ -81,6 +81,23 @@ tap.test('Register a plugin twice (same namespace)', t => {
 })
 
 // ----------------------------------------------------------------------------|
+tap.test('Register a plugin twice (two diferent namespaces)', t => {
+  t.plan(1)
+  const fastify = Fastify()
+  t.teardown(() => fastify.close())
+  fastify
+    .register(fastifyRedisChannelsPlugin, {
+      channels: { application: 'test' },
+      namespace: 'test1'
+    })
+    .register(fastifyRedisChannelsPlugin, {
+      channels: { application: 'test' },
+      namespace: 'test2'
+    })
+  t.pass('Plugin registred with two diferent name spaces')
+})
+
+// ----------------------------------------------------------------------------|
 tap.test('Register a plugin with a wrong option value', t => {
   t.plan(2)
   const fastify = Fastify()

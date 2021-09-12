@@ -5,12 +5,11 @@
 ![NPM License](https://img.shields.io/npm/l/fastify-redis-channels)
 ![NPM Downloads](https://img.shields.io/npm/dt/fastify-redis-channels)
 
+A Fastify plugin for fast, reliable, and scalable message broker implementation based on Redis streams.
 
-A Fastify plugin for fast, reliable, and scalable channels implementation based on Redis streams.
+Suitable for IoT applications with massive network traffic, pub/sub-use cases, or any implementation with multiple producers/consumers.
 
-Suitable for IoT applications with a massive network traffic, pub/sub use cases or any implementation with multiple producers/consumers.
-
-Implements a possiblity to scale the message processing across different consumers, without single consumers having to process all the messages. A group of consumers (a team) can cooperate consuming a different portion of the messages form the same channel.
+Implements a possibility to scale the message processing across different consumers, without single consumers having to process all the messages. A group of consumers, working as a team, can cooperate and consume a separate portion of those messages from the same channel.
 
 Can be used with a single Redis instance and later updated easily to a cluster configuration without need of any application change.
 
@@ -488,6 +487,14 @@ A request to [http://localhost:3000/](http://localhost:3000/) wil result in a wo
 ```
 The complete example is available here [fastify-redis-channels-worker-example](https://github.com/hearit-io/fastify-redis-channels-worker-example).
 
+### Service Send Events example
+
+This example presents a real use case of SSE similar to our `HEARIT.IO` implementation. See here the complete [sources](https://github.com/hearit-io/fastify-redis-channels-sse-example).
+
+The live SSE frontend implementation from our `HEARIT.IO` project is available [here](https://app.hearit.io/static/app.hearit.io/push.mjs).
+
+It demonstrates a reliable way of delivering service send events by using Redis stream ids and detecting gaps.
+
 ## Project status
 
 ### [hearit.io](https://hearit.io)
@@ -496,18 +503,17 @@ The complete example is available here [fastify-redis-channels-worker-example](h
 <img src="https://raw.githubusercontent.com/hearit-io/graphics/main/hearing-black-96dp.svg" width="48" height="48"/> | Smart home automatization designed for visually impaired people.
 ------------ | -------------
 
-**fastify-redis-channels** is used productive in our web [app](https://hearit.io/demo). The package will be updated and maintained in a regular base. 
+**@heart-io/redis-channels** is used productive in our progressive web [app](https://app.hearit.io). You can try it with a user `demo@hearit.io` and password: `11223344`
 
-The main goals of [hearit.io](https://hearit.io) is to make accessible the world of IoT to everyone. 
+The package will be updated and maintained regularly.
 
-No technological, design or speed compromises, we just do it. 
- 
-We will be grateful to you if you make awareness to other people of our project.
+The main goal of [hearit.io](https://hearit.io) is to make accessible the world of IoT to everyone. We created a speaking home suitable for all.
 
-Other useful packages, part of our project, will be available soon. 
+We will be grateful to you if you make awareness to other people of our project. 
 
-We use [Fastify](http://fastify.io) as an application framework. Thanks for the great job!
+To finance our idea, we would be glad to support and work on your projects. Contact Emil <emil@hearit.io> for details and our availability.
 
+Other open-source packages, part of our project, will be available soon. We use [Fastify](http://fastify.io) as an application framework.
 
 ## Todo
 - [x] Add plugin unit tests.
@@ -515,10 +521,12 @@ We use [Fastify](http://fastify.io) as an application framework. Thanks for the 
 - [ ] TypeScript support.
 
 
-
 ## Authors and acknowledgment
 
+Emil Usunov
+
 [hearit.io](https://hearit.io)
+
 
 ## License
 

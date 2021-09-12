@@ -66,12 +66,16 @@ function fastifyRedisChannels (fastify, opts, done) {
     // Append a channels instance and an error class.
     // ------------------------------------------------------------------------|
     if (typeof namespace !== 'undefined') {
-      fastify.decorate('channels', {})
+      if (typeof fastify.channels === typeof undefined) {
+        fastify.decorate('channels', {})
+      }
       fastify.channels[namespace] = new RedisChannels(opts)
     } else {
       fastify.decorate('channels', new RedisChannels(opts))
     }
-    fastify.decorate('RedisChannelsError', RedisChannelsError)
+    if (typeof fastify.RedisChannelsError === typeof undefined) {
+      fastify.decorate('RedisChannelsError', RedisChannelsError)
+    }
   } catch (error) {
     return done(error)
   }
