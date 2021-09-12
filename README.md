@@ -28,6 +28,7 @@ Under the hood [@hearit-io/redis-channels](https://github.com/hearit-io/redis-ch
 * [Learn by doing](#learn-by-doing)
   * [Chat server](#chat-server)
   * [Statistic worker](#statistic-worker)
+  * [Service Send Events example](#service-send-events-example)
 * [Project status](#project-status)
 * [Todo](#todo)
 * [Authors and acknowledgment](#authors-and-acknowledgment)
